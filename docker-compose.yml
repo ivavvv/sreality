@@ -1,0 +1,31 @@
+version: '3'
+services:
+  db:
+    image: postgres:12
+    environment:
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_USER: postgres
+      POSTGRES_DB: srealitydb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+      - ./initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
+  scraper:
+    build: 
+      context: ./sreality_scraper
+      dockerfile: Dockerfile_scrapy
+    depends_on:
+      - db
+  web:
+    build: 
+      context: ./
+      dockerfile: Dockerfile_flask
+    ports:
+      - "8080:5000"
+    depends_on:
+      - db
+      - scraper
+    command: ["python", "server.py"]
+
+volumes:
+    postgres_data:
+

@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html>
+<body>
+{% for estate in estates %}
+    <h1>{{ estate.name }}</h1>
+    <img src="{{ estate.images }}">
+{% endfor %}
+</body>
+</html>
+
